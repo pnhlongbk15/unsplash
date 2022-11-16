@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+.slick-arrow {
+  position: 'relative'
+}
+
+.slick-arrow.slick-prev::before {
+  content: "";
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  left: 0;
+  bottom: 50%;
+  transform: translateY(50%);
+  z-index: -1;
+  background-color: white;
+  box-shadow: 10px 0 10px 5px white, 30px 0 20px 5px white;
+}
+.slick-arrow.slick-next::before {
+  content: "";
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  right: 0;
+  bottom: 50%;
+  transform: translateY(50%);
+  z-index: -1;
+  background-color: white;
+  box-shadow: -10px 0 10px 5px white, -30px 0 20px 5px white;
+}
+/* .slick-arrow.slick-prev > button,
+.slick-arrow.slick-next > button {
+
+  background-color: black;
+  box-shadow: 10px 0 10px 10px white;
+  z-index: 99;
+} */
+
+.decorate > .decorate-border {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  border-bottom: 8px solid rgb(209, 213, 219);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+
+.decorate > .decorate-bg {
+  position: absolute;
+  bottom: -8.4px;
+  left: 0.8px;
+  border-bottom: 7.4px solid white;
+  border-left: 7.4px solid transparent;
+  border-right: 7.4px solid transparent;
+}
