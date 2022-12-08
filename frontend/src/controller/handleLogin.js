@@ -1,4 +1,4 @@
-import { auth, googleLogin } from "../API/firebase/firebase";
+import { auth, googleLogin } from "../api/firebase/firebase";
 
 
 

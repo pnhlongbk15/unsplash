@@ -1,25 +1,30 @@
 require("dotenv").config();
+require('./path');
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors")
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
-require("./path");
-const { viewEngine } = require(__path_configs)
+const viewEngine = require('./src/configs/viewEngine.config');
+const { connectBucket } = require('./src/configs/connectDB.config')
 
 const app = express();
-viewEngine(app);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+        console.log(`running at port ${PORT}`)
+        connectBucket()
+})
+
 
 //Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
+app.use(cookieParser());
 app.use(cors());
+viewEngine(app);
 
 //Routes
-app.use('/', require(__path_routes))
+app.use('/api', require('./src/api/routes'))
 
 
-app.listen(PORT, () => {
-        console.log(`running at port ${PORT}`)
-})
