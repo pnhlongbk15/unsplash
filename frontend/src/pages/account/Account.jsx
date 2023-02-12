@@ -18,7 +18,7 @@ const Account = ({ children }) => {
           </Link>
           <div className="relative group">
             <img
-              src={`api/photo/image_profile/${profile_image}`}
+              src={`api/image/image_profile/${profile_image}`}
               alt="user"
               className="w-[32px] h-[32px] rounded-full cursor-pointer"
             />

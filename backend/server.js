@@ -11,10 +11,8 @@ const { connectBucket } = require('./src/configs/connectDB.config')
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-        console.log(`running at port ${PORT}`)
-        connectBucket()
-})
+
+const { imageBucket } = require('./src/configs/connectDB.config')
 
 
 //Middleware
@@ -25,6 +23,21 @@ app.use(cors());
 viewEngine(app);
 
 //Routes
-app.use('/api', require('./src/api/routes'))
+// app.use('/api', require('./src/api/routes'))
 
+app.listen(PORT, async () => {
+        console.log(`running at port ${PORT}`)
 
+})
+connectBucket()
+console.log('imageBuc', imageBucket)
+
+app.get('/album', (req, res) => {
+        console.log('internal', imageBucket)
+
+        imageBucket?.find({}).toArray((err, result) => {
+                console.log(result)
+        })
+})
+
+console.log('Port',process.env.PORT)

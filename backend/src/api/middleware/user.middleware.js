@@ -1,21 +1,24 @@
 const { searchPasswordUserById } = require('../services/user.service')
 const { verifyPassword } = require('../helpers/password')
 
-module.exports = {
-        verifyPasswordForChange: async (req, res, next) => {
-                console.log('verifyPasswordForChange')
-                if (req.body.currPassword) {
-                        const password = await searchPasswordUserById(req.user.id).then((data) => data.password)
-                        console.log(password)
+const { ErrResponse } = require('../helpers/feedback')
 
-                        const isValid = await verifyPassword(req.body.currPassword, password)
-                        if (isValid) {
-                                next()
-                        } else {
-                                res.status(200).json('password khong khop')
-                        }
+module.exports = {
+        verifyPasswordForUpdate: (req, res, next) => {
+                if (req.body.currPassword) {
+                        searchPasswordUserById(req.user.id).then((result) => {
+
+                                verifyPassword(req.body.currPassword, result.data.password).then((result) => {
+                                        const isValid = result.data;
+                                        if (isValid) {
+                                                next()
+                                        } else {
+                                                return res.status(400).json(new ErrResponse(400, result.message))
+                                        }
+                                })
+                        }).catch((error) => res.status(404).json(new ErrResponse(404, error.message)))
                 } else {
-                        next()
+                        return res.status(401).json(new ErrResponse(401, 'Please enter a password !'))
                 }
 
         }

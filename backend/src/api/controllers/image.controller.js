@@ -1,48 +1,60 @@
-const mongoose = require('mongoose');
-
-const { updateUser } = require('../services/user.service')
-const { getImgProfile } = require('../services/image.service')
+const { updateUser, searchUserById } = require('../services/user.service')
+const { getImgProfile, deleteImgProfile } = require('../services/image.service')
 
 const { APIResponse, ErrResponse } = require('../helpers/feedback')
 
 
 module.exports = {
-        updateImgProfile: (req, res) => {
-                try {
-                        var newInfo = {
-                                profile_image: req.file.id
-                        }
-                        updateUser(req.user.id, newInfo)
-                        res.status(200).json(new APIResponse(200, 'update Image success'))
-                } catch (err) {
-                        res.status(500).json(new ErrResponse(400, err.message))
-                }
-        },
-        displayImgProfile: async (req, res) => {
-                try {
-                        const { id } = req.params;
-                        const _id = mongoose.Types.ObjectId(id);
-
-                        getImgProfile(_id)
-                                .then((file) => file.pipe(res))
-                                .catch((err) => {
-                                        if (err.status == 500) {
-                                                return res.status(500).json(err)
-                                        } else {
-                                                return res.status(404).json(err)
-                                        }
-                                })
-                } catch (err) {
-                        return res.status(404).json(new ErrResponse(500, 'Process get image is error'))
-                }
-        },
-        removeImgProfile: (req, res) => {
-                const id = '638793177d20d38b301f5db9'
-                const _id = mongoose.Types.ObjectId(id)
-                try {
-                        res.status(200).json(new APIResponse(200, 'remove Img Profile'))
-                } catch (err) {
-                        res.status(401).json(new ErrResponse(400, 'error'))
-                }
+    displayImgProfile: async (req, res) => {
+        try {
+            // result.data.pipe(res)
+            const { id } = req.params;
+            console.log('id', id)
+            // res.status(200).send('ok')
+            getImgProfile(id)
+                .then((result) => {
+                    console.log(result)
+                    res.status(200).send('ok')
+                })
+                .catch((error) => res.status(404).json(new ErrResponse(404, error.message)))
+        } catch (error) {
+            return res.status(500).json(new ErrResponse(500, error.message))
         }
+    },
+    // through authUser
+    updateImgProfile: (req, res) => {
+        try {
+            var newInfo = {
+                profile_image: req.file.id
+            }
+            updateUser(req.user.id, newInfo)
+                .then((result) => res.status(201).json(new APIResponse(201, result.message)))
+                .catch((error) => res.status(404).json(new APIResponse(404, error.message)))
+        } catch (error) {
+            return res.status(500).json(new ErrResponse(500, error.message))
+        }
+    },
+
+    removeImgProfile: (req, res) => {
+        try {
+            const id = req.user.id
+            const infoImageDefault = {
+                profile_image: process.env.IMAGE_PROFILE_DEFAULT_ID
+            }
+            searchUserById(id).then((result) => {
+                // cần id image nền cần find
+                // update lại thì không nhận được id
+                updateUser(id, infoImageDefault).then(() => {
+
+                    deleteImgProfile(resolve.data.profile_image)
+                        .then((result) => res.status(201).json(new APIResponse(201, result.message)))
+                        .catch((error) => res.status(404).json(new ErrResponse(404, error.message)))
+
+                }).catch((error) => res.status(404).json(new ErrResponse(404, error.message)))
+
+            }).catch((error) => res.status(404).json(new ErrResponse(404, error.message)))
+        } catch (err) {
+            res.status(500).json(new ErrResponse(500, err.message))
+        }
+    }
 }

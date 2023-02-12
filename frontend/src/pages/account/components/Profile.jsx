@@ -30,7 +30,7 @@ const Profile = () => {
             <div className='w-1/3'>
               <div className='flex flex-col items-center'>
                 <img 
-                  src={`api/photo/image_profile/${currentUser.profile_image}`} 
+                  src={`api/image/image_profile/${currentUser.profile_image}`} 
                   alt='user'                   
                   className='rounded-full h-[128px] w-[128px] object-cover'
                   />

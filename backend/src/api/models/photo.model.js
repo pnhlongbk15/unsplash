@@ -14,4 +14,4 @@ const photoSchema = new mongoose.Schema({
         }
 }, { timestamps: true })
 
-module.exports = mongoose.model('Photo', photoSchema)
+module.exports.PhotoColl = mongoose.model('Photo', photoSchema)

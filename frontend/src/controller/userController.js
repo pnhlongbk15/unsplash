@@ -23,7 +23,7 @@ const updateImage = (newImage) => {
         formData.append("file", newImage)
         try {
                 const accessToken = sessionStorage.getItem('accessToken')
-                axios.post('/api/photo/update', formData, {
+                axios.post('/api/image/update', formData, {
                         headers: {
                                 'Content-Type': 'multipart/form-data',
                                 'authorization': accessToken

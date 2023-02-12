@@ -87,7 +87,7 @@ const Header = () => {
             </div>
 
             <div className='relative group'>
-              <img src={`api/photo/image_profile/${currentUser.profile_image}`} alt='user' className='w-[32px] h-[32px] rounded-full cursor-pointer' />
+              <img src={`api/image/image_profile/${currentUser.profile_image}`} alt='user' className='w-[32px] h-[32px] rounded-full cursor-pointer' />
               <div className='hidden z-50 bg-white absolute bottom-2 right-0 translate-y-[110%] border-gray-300 border group-hover:flex flex-col rounded-sm  shadow-lg'>
                 <div className='absolute -top-[8px] right-5 decorate'>
                   <span className='decorate-border'></span>

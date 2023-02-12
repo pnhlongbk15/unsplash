@@ -31,8 +31,8 @@ const login = (info, navigate, dispatch) => {
         dispatch(loginStart())
         axios.post("/api/user/login", info)
                 .then(({ data }) => {
-                        const { status, accessToken } = data;
-                        dispatch(loginSuccess(status))
+                        const { message, data: { accessToken } } = data;
+                        dispatch(loginSuccess(message))
                         sessionStorage.setItem('accessToken', accessToken)
                         dispatch(getMeStart())
                         navigate('/');
@@ -67,8 +67,8 @@ const getUser = async (dispatch) => {
                         headers: {
                                 authorization: accessToken
                         }
-                }).then(({ data: { user } }) => {
-                        dispatch(getMeSuccess(user))
+                }).then(({ data: { data } }) => {
+                        dispatch(getMeSuccess(data))
                 })
         } catch (err) {
                 console.log({ status: 'getUser failed', message: err.message })

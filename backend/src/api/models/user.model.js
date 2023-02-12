@@ -48,8 +48,8 @@ const userSchema = new mongoose.Schema({
         profile_image: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'images.files',
-                default: mongoose.Types.ObjectId('638726368c5576294e1cd813')
+                default: mongoose.Types.ObjectId(process.env.IMAGE_PROFILE_DEFAULT_ID)
         }
 }, { timestamps: true });
 
-module.exports = mongoose.model('User', userSchema, 'User');
+module.exports.UserColl = mongoose.model('User', userSchema, 'User');

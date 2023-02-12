@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
-let imageBucket;
+var imageBucket;
 
-const connectBucket = () => {
+function connectBucket() {
         mongoose.connect(
                 process.env.MONGODB_URL_AUTH,
                 (err) => {
@@ -21,6 +21,6 @@ const connectBucket = () => {
 }
 
 module.exports = {
-        girdBucket: { imageBucket },
+        imageBucket,
         connectBucket
 }

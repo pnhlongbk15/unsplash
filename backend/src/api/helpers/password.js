@@ -10,12 +10,17 @@ module.exports = {
         },
         verifyPassword: (passInClient, passInData) => {
                 return new Promise(async (resolve, reject) => {
+                        console.log(passInClient,passInData)
                         await bcrypt.compare(
                                 passInClient,
                                 passInData
-                        )
-                                .then((isValid) => resolve(new ModelResponse(1, '', isValid)))
-                                .catch((error) => reject(new ModelResponse(0, error.message)))
+                        ).then((result) => {
+                                if (result) {
+                                        resolve(new ModelResponse('success', result))
+                                } else {
+                                        resolve(new ModelResponse('Password is invalid', result))
+                                }
+                        }).catch((error) => reject(new ModelResponse(error.message)))
                 })
         }
 }

@@ -14,9 +14,8 @@ class ErrResponse {
 }
 
 class ModelResponse {
-        constructor(code = 1, error = '', data = []) {
-                this.code = code;
-                this.error = error;
+        constructor(message = '', data = []) {
+                this.message = message;
                 this.data = data
         }
 }

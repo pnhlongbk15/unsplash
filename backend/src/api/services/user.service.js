@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const User = require('../models/user.model')
+const { UserColl } = require('../models/user.model')
 
 const { ModelResponse } = require('../helpers/feedback')
 
@@ -13,7 +13,7 @@ module.exports = {
         }) => {
                 return new Promise((resolve, reject) => {
 
-                        new User({
+                        new UserColl({
                                 first_name,
                                 last_name,
                                 email,
@@ -21,41 +21,53 @@ module.exports = {
                                 password
                         })
                                 .save()
-                                .then(() => resolve(new ModelResponse()))
-                                .catch((error) => reject(new ModelResponse(0, error.message)))
+                                .then(() => resolve(new ModelResponse('success')))
+                                .catch((error) => reject(new ModelResponse(error.message)))
                 })
         },
         searchUserByEmail: (email) => {
                 return new Promise((resolve, reject) => {
                         /* value return include password is required*/
-                        User.findOne({ email })
-                                .then((result) => resolve(new ModelResponse(1, '', result)))
-                                .catch((error) => reject(new ModelResponse(0, error.message)))
+                        UserColl.findOne({ email }).then((result) => {
+                                if (result) {
+                                        resolve(new ModelResponse('success', result))
+                                } else {
+                                        reject(new ModelResponse('Email is invalid'))
+                                }
+                        }).catch((error) => reject(new ModelResponse(error.message)))
                 })
         },
-        searchUserById: async (id) => {
-                try {
+        searchUserById: (id) => {
+                return new Promise((resolve, reject) => {
                         const _id = mongoose.Types.ObjectId(id)
-                        return await User.findById(_id, '-_id -password -createdAt -updatedAt')
-                } catch (err) {
-                        console.error('searchUser:', err.message)
-                }
+                        UserColl.findById(_id, '-_id -password -createdAt -updatedAt').then((result) => {
+                                if (result) {
+                                        resolve(new ModelResponse('success', result))
+                                } else {
+                                        reject(new ModelResponse('User does not exist'))
+                                }
+                        }).catch((error) => reject(new ModelResponse(error.message)))
+                })
+        },
+        updateUser: (id, newInfo) => {
+                return new Promise((resolve, reject) => {
+                        const _id = mongoose.Types.ObjectId(id)
+                        UserColl.findOneAndUpdate({ _id }, { $set: newInfo }).then((result) => {
+                                if (result.length > 0) {
+                                        resolve(new ModelResponse('Update successful'))
+                                } else {
+                                        reject(new ModelResponse('User does not exist'))
+                                }
+                        }).catch((error) => reject(new ModelResponse(error.message)))
+                })
         },
         searchPasswordUserById: async (id) => {
-                try {
+                return new Promise((resolve, reject) => {
                         const _id = mongoose.Types.ObjectId(id)
-                        return await User.findById(_id, 'password -_id')
-                } catch (err) {
-                        console.error('searchPasswordUser:', err.message)
-                }
-        },
-        updateUser: async (id, newInfo) => {
-                try {
-                        const _id = mongoose.Types.ObjectId(id)
-                        await User.findOneAndUpdate({ _id }, newInfo)
-                } catch (err) {
-                        console.error('updateUser:', err.message)
-                }
+                        UserColl.findById(_id, 'password -_id')
+                                .then((result) => resolve(new ModelResponse('success', result)))
+                                .catch((error) => reject(new ModelResponse(error.message)))
+                })
         },
 }
 
